@@ -19,7 +19,7 @@ WatchFaceDigital::WatchFaceDigital(DisplayApp* app,
                                    Controllers::DateTime& dateTimeController,
                                    Controllers::Battery& batteryController,
                                    Controllers::Ble& bleController,
-                                   Controllers::NotificationManager& notificatioManager,
+                                   Controllers::NotificationManager& notificationManager,
                                    Controllers::Settings& settingsController,
                                    Controllers::HeartRateController& heartRateController,
                                    Controllers::MotionController& motionController)
@@ -28,7 +28,7 @@ WatchFaceDigital::WatchFaceDigital(DisplayApp* app,
     dateTimeController {dateTimeController},
     batteryController {batteryController},
     bleController {bleController},
-    notificatioManager {notificatioManager},
+    notificationManager {notificationManager},
     settingsController {settingsController},
     heartRateController {heartRateController},
     motionController {motionController} {
@@ -127,7 +127,7 @@ void WatchFaceDigital::Refresh() {
   lv_obj_align(batteryPlug, batteryIcon, LV_ALIGN_OUT_LEFT_MID, -5, 0);
   lv_obj_align(bleIcon, batteryPlug, LV_ALIGN_OUT_LEFT_MID, -5, 0);
 
-  notificationState = notificatioManager.AreNewNotificationsAvailable();
+  notificationState = notificationManager.AreNewNotificationsAvailable();
   if (notificationState.IsUpdated()) {
     lv_label_set_text(notificationIcon, NotificationIcon::GetIcon(notificationState.Get()));
   }

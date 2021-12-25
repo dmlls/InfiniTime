@@ -48,7 +48,7 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
                              Controllers::DateTime& dateTimeController,
                              Controllers::Battery& batteryController,
                              Controllers::Ble& bleController,
-                             Controllers::NotificationManager& notificatioManager,
+                             Controllers::NotificationManager& notificationManager,
                              Controllers::Settings& settingsController,
                              Controllers::MotionController& motionController)
   : Screen(app),
@@ -56,7 +56,7 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
     dateTimeController {dateTimeController},
     batteryController {batteryController},
     bleController {bleController},
-    notificatioManager {notificatioManager},
+    notificationManager {notificationManager},
     settingsController {settingsController},
     motionController {motionController} {
 
@@ -375,7 +375,7 @@ void PineTimeStyle::Refresh() {
     AlignIcons();
   }
 
-  notificationState = notificatioManager.AreNewNotificationsAvailable();
+  notificationState = notificationManager.AreNewNotificationsAvailable();
   if (notificationState.IsUpdated()) {
     lv_label_set_text(notificationIcon, NotificationIcon::GetIcon(notificationState.Get()));
     AlignIcons();
