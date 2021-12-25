@@ -46,7 +46,7 @@ Clock::Clock(DisplayApp* app,
           return WatchFaceModernScreen();
           break;
       }
-      return WatchFaceDigitalScreen();
+      return WatchFaceModernScreen();
     }()} {
   settingsController.SetAppMenu(0);
 }
@@ -90,7 +90,7 @@ std::unique_ptr<Screen> Clock::PineTimeStyleScreen() {
 }
 
 std::unique_ptr<Screen> Clock::WatchFaceModernScreen() {
-  return std::make_unique<Screens::WatchFaceDigital>(app,
+  return std::make_unique<Screens::WatchFaceModern>(app,
                                                      dateTimeController,
                                                      bleController,
                                                      notificationManager,

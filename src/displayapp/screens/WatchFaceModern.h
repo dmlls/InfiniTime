@@ -20,15 +20,15 @@ namespace Pinetime {
   namespace Applications {
     namespace Screens {
 
-      class WatchFaceDigital : public Screen {
+      class WatchFaceModern : public Screen {
       public:
-        WatchFaceDigital(DisplayApp* app,
+        WatchFaceModern(DisplayApp* app,
                          Controllers::DateTime& dateTimeController,
                          Controllers::Ble& bleController,
                          Controllers::NotificationManager& notificationManager,
                          Controllers::Settings& settingsController,
                          Controllers::MotionController& motionController);
-        ~WatchFaceDigital() override;
+        ~WatchFaceModern() override;
 
         void Refresh() override;
 

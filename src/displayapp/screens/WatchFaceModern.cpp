@@ -96,7 +96,6 @@ void WatchFaceModern::Refresh() {
     sprintf(minutesChar, "%02d", static_cast<int>(minute));
 
     char hoursChar[3];
-    char ampmChar[3];
     if (settingsController.GetClockType() == Controllers::Settings::ClockType::H24) {
       sprintf(hoursChar, "%02d", hour);
     } else {
@@ -104,7 +103,6 @@ void WatchFaceModern::Refresh() {
         hour = 12;
       } else if (hour == 12 && hour != 0) {
         hour = 12;
-      }
       } else if (hour > 12 && hour != 0) {
         hour = hour - 12;
       }
@@ -123,7 +121,7 @@ void WatchFaceModern::Refresh() {
 
     if ((year != currentYear) || (month != currentMonth) || (dayOfWeek != currentDayOfWeek) || (day != currentDay)) {
       lv_label_set_text_fmt(label_date, "%s %d", dateTimeController.DayOfWeekShortToStringLow(), day);
-      lv_obj_align(label_date, lv_scr_act(), LV_ALIGN_RIGHT_MID, 0, 0);
+      lv_obj_align(label_date, lv_scr_act(), LV_ALIGN_IN_RIGHT_MID, 0, 0);
 
       currentYear = year;
       currentMonth = month;
@@ -136,7 +134,7 @@ void WatchFaceModern::Refresh() {
   motionSensorOk = motionController.IsSensorOk();
   if (stepCount.IsUpdated() || motionSensorOk.IsUpdated()) {
     lv_label_set_text_fmt(stepValue, "%lu", stepCount.Get());
-    lv_obj_align(stepValue, lv_scr_act(), LV_ALIGN_BOTTOM_MID, 20, 0);
+    lv_obj_align(stepValue, lv_scr_act(), LV_ALIGN_IN_BOTTOM_MID, 20, 0);
     lv_obj_align(stepIcon, stepValue, LV_ALIGN_OUT_LEFT_MID, -5, 0);
   }
 }
