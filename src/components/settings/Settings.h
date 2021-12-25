@@ -171,7 +171,7 @@ namespace Pinetime {
         ClockType clockType = ClockType::H24;
         Notification notificationStatus = Notification::ON;
 
-        uint8_t clockFace = 0;
+        uint8_t clockFace = 3;
 
         PineTimeStyle PTS;
 
