@@ -11,6 +11,7 @@
 #include "displayapp/screens/WatchFaceDigital.h"
 #include "displayapp/screens/WatchFaceAnalog.h"
 #include "displayapp/screens/PineTimeStyle.h"
+#include "displayapp/screens/WatchFaceModern.h"
 
 using namespace Pinetime::Applications::Screens;
 
@@ -18,7 +19,7 @@ Clock::Clock(DisplayApp* app,
              Controllers::DateTime& dateTimeController,
              Controllers::Battery& batteryController,
              Controllers::Ble& bleController,
-             Controllers::NotificationManager& notificatioManager,
+             Controllers::NotificationManager& notificationManager,
              Controllers::Settings& settingsController,
              Controllers::HeartRateController& heartRateController,
              Controllers::MotionController& motionController)
@@ -26,7 +27,7 @@ Clock::Clock(DisplayApp* app,
     dateTimeController {dateTimeController},
     batteryController {batteryController},
     bleController {bleController},
-    notificatioManager {notificatioManager},
+    notificationManager {notificationManager},
     settingsController {settingsController},
     heartRateController {heartRateController},
     motionController {motionController},
@@ -40,6 +41,9 @@ Clock::Clock(DisplayApp* app,
           break;
         case 2:
           return PineTimeStyleScreen();
+          break;
+        case 3:
+          return WatchFaceModernScreen();
           break;
       }
       return WatchFaceDigitalScreen();
@@ -64,7 +68,7 @@ std::unique_ptr<Screen> Clock::WatchFaceDigitalScreen() {
                                                      dateTimeController,
                                                      batteryController,
                                                      bleController,
-                                                     notificatioManager,
+                                                     notificationManager,
                                                      settingsController,
                                                      heartRateController,
                                                      motionController);
@@ -72,15 +76,24 @@ std::unique_ptr<Screen> Clock::WatchFaceDigitalScreen() {
 
 std::unique_ptr<Screen> Clock::WatchFaceAnalogScreen() {
   return std::make_unique<Screens::WatchFaceAnalog>(
-    app, dateTimeController, batteryController, bleController, notificatioManager, settingsController);
+    app, dateTimeController, batteryController, bleController, notificationManager, settingsController);
 }
 
 std::unique_ptr<Screen> Clock::PineTimeStyleScreen() {
   return std::make_unique<Screens::PineTimeStyle>(app,
+                                                  dateTimeController,
+                                                  batteryController,
+                                                  bleController,
+                                                  notificationManager,
+                                                  settingsController,
+                                                  motionController);
+}
+
+std::unique_ptr<Screen> Clock::WatchFaceModernScreen() {
+  return std::make_unique<Screens::WatchFaceDigital>(app,
                                                      dateTimeController,
-                                                     batteryController,
                                                      bleController,
-                                                     notificatioManager,
+                                                     notificationManager,
                                                      settingsController,
                                                      motionController);
 }

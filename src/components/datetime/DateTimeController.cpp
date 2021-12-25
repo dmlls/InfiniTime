@@ -7,6 +7,7 @@ using namespace Pinetime::Controllers;
 
 namespace {
   char const* DaysStringShort[] = {"--", "MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"};
+  char const* DaysStringShortLow[] = {"--", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
   char const* MonthsString[] = {"--", "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
   char const* MonthsStringLow[] = {"--", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 }
@@ -89,12 +90,16 @@ const char* DateTime::MonthShortToString() {
   return MonthsString[static_cast<uint8_t>(month)];
 }
 
+const char* DateTime::MonthShortToStringLow(Months month) {
+  return MonthsStringLow[static_cast<uint8_t>(month)];
+}
+
 const char* DateTime::DayOfWeekShortToString() {
   return DaysStringShort[static_cast<uint8_t>(dayOfWeek)];
 }
 
-const char* DateTime::MonthShortToStringLow(Months month) {
-  return MonthsStringLow[static_cast<uint8_t>(month)];
+const char* DateTime::DayOfWeekShortToStringLow() {
+  return DaysStringShortLow[static_cast<uint8_t>(dayOfWeek)];
 }
 
 void DateTime::Register(Pinetime::System::SystemTask* systemTask) {
