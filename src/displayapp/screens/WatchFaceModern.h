@@ -10,10 +10,8 @@
 namespace Pinetime {
   namespace Controllers {
     class Settings;
-    class Battery;
     class Ble;
     class NotificationManager;
-    class HeartRateController;
     class MotionController;
   }
 
@@ -46,19 +44,13 @@ namespace Pinetime {
         DirtyValue<std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>> currentDateTime {};
         DirtyValue<bool> motionSensorOk {};
         DirtyValue<uint32_t> stepCount {};
-        DirtyValue<uint8_t> heartbeat {};
-        DirtyValue<bool> heartbeatRunning {};
         DirtyValue<bool> notificationState {};
 
-        lv_obj_t* label_time;
-        lv_obj_t* label_time_ampm;
+        lv_obj_t* label_hour;
+        lv_obj_t* label_minutes;
         lv_obj_t* label_date;
         lv_obj_t* backgroundLabel;
-        lv_obj_t* batteryIcon;
         lv_obj_t* bleIcon;
-        lv_obj_t* batteryPlug;
-        lv_obj_t* heartbeatIcon;
-        lv_obj_t* heartbeatValue;
         lv_obj_t* stepIcon;
         lv_obj_t* stepValue;
         lv_obj_t* notificationIcon;

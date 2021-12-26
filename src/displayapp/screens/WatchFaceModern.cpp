@@ -3,7 +3,6 @@
 #include <date/date.h>
 #include <lvgl/lvgl.h>
 #include <cstdio>
-#include "displayapp/screens/BatteryIcon.h"
 #include "displayapp/screens/BleIcon.h"
 #include "displayapp/screens/NotificationIcon.h"
 #include "displayapp/screens/Symbols.h"
@@ -34,14 +33,18 @@ WatchFaceModern::WatchFaceModern(DisplayApp* app,
   lv_obj_align(notificationIcon, nullptr, LV_ALIGN_IN_TOP_LEFT, 0, 0);
 
   label_date = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_align(label_date, lv_scr_act(), LV_ALIGN_CENTER, 0, 60);
+  lv_obj_align(label_date, lv_scr_act(), LV_ALIGN_IN_RIGHT_MID, 0, 0);
   lv_obj_set_style_local_text_color(label_date, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
 
-  label_time = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_align(label_time, lv_scr_act(), LV_ALIGN_CENTER, 0, 0);
-  lv_obj_set_style_local_text_font(label_time, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_extrabold_compressed);
+  label_hour = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_font(label_hour, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &open_sans_light);
+  lv_label_set_text(label_hour, "00");
+  lv_obj_align(label_hour, lv_scr_act(), LV_ALIGN_IN_TOP_MID, 5, 5);
 
-  lv_obj_align(label_time, lv_scr_act(), LV_ALIGN_IN_RIGHT_MID, 0, 0);
+  label_minutes = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_font(label_minutes, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &open_sans_light);
+  lv_label_set_text(label_minutes, "00");
+  lv_obj_align(label_minutes, lv_scr_act(), LV_ALIGN_IN_BOTTOM_MID, 5, -5);
 
   backgroundLabel = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_click(backgroundLabel, true);
@@ -99,9 +102,7 @@ void WatchFaceModern::Refresh() {
     if (settingsController.GetClockType() == Controllers::Settings::ClockType::H24) {
       sprintf(hoursChar, "%02d", hour);
     } else {
-      if (hour == 0 && hour != 12) {
-        hour = 12;
-      } else if (hour == 12 && hour != 0) {
+      if ((hour == 0 && hour != 12) || (hour != 0 && hour == 12)) {
         hour = 12;
       } else if (hour > 12 && hour != 0) {
         hour = hour - 12;
@@ -109,19 +110,19 @@ void WatchFaceModern::Refresh() {
       sprintf(hoursChar, "%02d", hour);
     }
 
-    if ((hoursChar[0] != displayedChar[0]) or (hoursChar[1] != displayedChar[1]) or (minutesChar[0] != displayedChar[2]) or
+    if ((hoursChar[0] != displayedChar[0]) || (hoursChar[1] != displayedChar[1]) || (minutesChar[0] != displayedChar[2]) ||
         (minutesChar[1] != displayedChar[3])) {
       displayedChar[0] = hoursChar[0];
       displayedChar[1] = hoursChar[1];
       displayedChar[2] = minutesChar[0];
       displayedChar[3] = minutesChar[1];
 
-      lv_label_set_text_fmt(label_time, "%s\n%s", hoursChar, minutesChar);
+      lv_label_set_text_fmt(label_hour, "%s", hoursChar);
+      lv_label_set_text_fmt(label_minutes, "%s", minutesChar);
     }
 
     if ((year != currentYear) || (month != currentMonth) || (dayOfWeek != currentDayOfWeek) || (day != currentDay)) {
       lv_label_set_text_fmt(label_date, "%s %d", dateTimeController.DayOfWeekShortToStringLow(), day);
-      lv_obj_align(label_date, lv_scr_act(), LV_ALIGN_IN_RIGHT_MID, 0, 0);
 
       currentYear = year;
       currentMonth = month;
