@@ -32,19 +32,21 @@ WatchFaceModern::WatchFaceModern(DisplayApp* app,
   lv_label_set_text(notificationIcon, NotificationIcon::GetIcon(false));
   lv_obj_align(notificationIcon, nullptr, LV_ALIGN_IN_TOP_LEFT, 0, 0);
 
-  label_date = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_align(label_date, lv_scr_act(), LV_ALIGN_IN_RIGHT_MID, 0, 0);
-  lv_obj_set_style_local_text_color(label_date, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
+  labelDate = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_align(labelDate, lv_scr_act(), LV_ALIGN_IN_RIGHT_MID, 0, 0);
+  lv_obj_set_style_local_text_color(labelDate, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
+  lv_obj_set_style_local_text_font(labelDate, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &teko_28);
+  lv_label_set_text(labelDate, "Mon 01");
 
-  label_hour = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_font(label_hour, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &open_sans_light);
-  lv_label_set_text(label_hour, "00");
-  lv_obj_align(label_hour, lv_scr_act(), LV_ALIGN_IN_TOP_MID, 5, 5);
+  labelHour = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_font(labelHour, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &bebas_neue_120);
+  lv_label_set_text(labelHour, "00");
+  lv_obj_align(labelHour, lv_scr_act(), LV_ALIGN_IN_TOP_MID, 0, 5);
 
-  label_minutes = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_font(label_minutes, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &open_sans_light);
-  lv_label_set_text(label_minutes, "00");
-  lv_obj_align(label_minutes, lv_scr_act(), LV_ALIGN_IN_BOTTOM_MID, 5, -5);
+  labelMinutes = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_font(labelMinutes, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &bebas_neue_120);
+  lv_label_set_text(labelMinutes, "00");
+  lv_obj_align(labelMinutes, lv_scr_act(), LV_ALIGN_IN_BOTTOM_MID, 0, -15);
 
   backgroundLabel = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_click(backgroundLabel, true);
@@ -55,8 +57,9 @@ WatchFaceModern::WatchFaceModern(DisplayApp* app,
 
   stepValue = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(stepValue, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
-  lv_label_set_text(stepValue, "0");
+  lv_obj_set_style_local_text_font(stepValue, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &teko_28);
   lv_obj_align(stepValue, lv_scr_act(), LV_ALIGN_IN_BOTTOM_RIGHT, 0, 0);
+  lv_label_set_text(stepValue, "0");
 
   stepIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(stepIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
@@ -117,12 +120,13 @@ void WatchFaceModern::Refresh() {
       displayedChar[2] = minutesChar[0];
       displayedChar[3] = minutesChar[1];
 
-      lv_label_set_text_fmt(label_hour, "%s", hoursChar);
-      lv_label_set_text_fmt(label_minutes, "%s", minutesChar);
+      lv_label_set_text_fmt(labelHour, "%s", hoursChar);
+      lv_label_set_text_fmt(labelMinutes, "%s", minutesChar);
     }
 
     if ((year != currentYear) || (month != currentMonth) || (dayOfWeek != currentDayOfWeek) || (day != currentDay)) {
-      lv_label_set_text_fmt(label_date, "%s %d", dateTimeController.DayOfWeekShortToStringLow(), day);
+      lv_label_set_text_fmt(labelDate, "%s %02d", dateTimeController.DayOfWeekShortToStringLow(), day);
+      lv_obj_align(labelDate, lv_scr_act(), LV_ALIGN_IN_RIGHT_MID, 0, 0);
 
       currentYear = year;
       currentMonth = month;

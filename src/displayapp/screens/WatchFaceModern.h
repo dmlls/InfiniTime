@@ -46,9 +46,9 @@ namespace Pinetime {
         DirtyValue<uint32_t> stepCount {};
         DirtyValue<bool> notificationState {};
 
-        lv_obj_t* label_hour;
-        lv_obj_t* label_minutes;
-        lv_obj_t* label_date;
+        lv_obj_t* labelHour;
+        lv_obj_t* labelMinutes;
+        lv_obj_t* labelDate;
         lv_obj_t* backgroundLabel;
         lv_obj_t* bleIcon;
         lv_obj_t* stepIcon;
