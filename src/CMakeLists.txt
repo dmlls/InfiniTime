@@ -450,6 +450,7 @@ list(APPEND SOURCE_FILES
 
         ## Watch faces
         displayapp/icons/bg_clock.c
+        displayapp/icons/side_cover.c
         displayapp/screens/WatchFaceAnalog.cpp
         displayapp/screens/WatchFaceDigital.cpp
         displayapp/screens/PineTimeStyle.cpp

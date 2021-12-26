@@ -54,6 +54,8 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "cinttypes": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "__config": "cpp",
+        "__nullptr": "cpp"
     }
 }

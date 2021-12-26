@@ -12,6 +12,8 @@
 #include "components/settings/Settings.h"
 using namespace Pinetime::Applications::Screens;
 
+LV_IMG_DECLARE(side_cover);
+
 WatchFaceModern::WatchFaceModern(DisplayApp* app,
                                    Controllers::DateTime& dateTimeController,
                                    Controllers::Ble& bleController,
@@ -26,6 +28,10 @@ WatchFaceModern::WatchFaceModern(DisplayApp* app,
     settingsController {settingsController},
     motionController {motionController} {
   settingsController.SetClockFace(3);
+  
+  sideCover = lv_img_create(lv_scr_act(), nullptr);
+  lv_img_set_src(sideCover, &side_cover);
+  lv_obj_align(sideCover, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 0, 0);
 
   notificationIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(notificationIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x00FF00));
@@ -48,17 +54,10 @@ WatchFaceModern::WatchFaceModern(DisplayApp* app,
   lv_label_set_text(labelMinutes, "00");
   lv_obj_align(labelMinutes, lv_scr_act(), LV_ALIGN_IN_BOTTOM_MID, 0, -15);
 
-  backgroundLabel = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_click(backgroundLabel, true);
-  lv_label_set_long_mode(backgroundLabel, LV_LABEL_LONG_CROP);
-  lv_obj_set_size(backgroundLabel, 240, 240);
-  lv_obj_set_pos(backgroundLabel, 0, 0);
-  lv_label_set_text(backgroundLabel, "");
-
   stepValue = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(stepValue, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
   lv_obj_set_style_local_text_font(stepValue, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &teko_28);
-  lv_obj_align(stepValue, lv_scr_act(), LV_ALIGN_IN_BOTTOM_RIGHT, 0, 0);
+  lv_obj_align(stepValue, lv_scr_act(), LV_ALIGN_IN_BOTTOM_RIGHT, -5, 0);
   lv_label_set_text(stepValue, "0");
 
   stepIcon = lv_label_create(lv_scr_act(), nullptr);
