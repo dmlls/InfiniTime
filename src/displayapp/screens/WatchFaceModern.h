@@ -30,6 +30,7 @@ namespace Pinetime {
 
         void Refresh() override;
 
+        static const char* GetIcon(bool newNotificationAvailable);
       private:
         char displayedChar[5] {};
 

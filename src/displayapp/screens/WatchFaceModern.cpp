@@ -4,12 +4,12 @@
 #include <lvgl/lvgl.h>
 #include <cstdio>
 #include "displayapp/screens/BleIcon.h"
-#include "displayapp/screens/NotificationIcon.h"
 #include "displayapp/screens/Symbols.h"
 #include "components/ble/BleController.h"
 #include "components/ble/NotificationManager.h"
 #include "components/motion/MotionController.h"
 #include "components/settings/Settings.h"
+
 using namespace Pinetime::Applications::Screens;
 
 LV_IMG_DECLARE(side_cover);
@@ -34,9 +34,10 @@ WatchFaceModern::WatchFaceModern(DisplayApp* app,
   lv_obj_align(sideCover, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 0, 0);
 
   notificationIcon = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_color(notificationIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x00FF00));
-  lv_label_set_text(notificationIcon, NotificationIcon::GetIcon(false));
-  lv_obj_align(notificationIcon, nullptr, LV_ALIGN_IN_TOP_LEFT, 0, 0);
+  lv_obj_set_style_local_text_color(notificationIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xE85102));
+  lv_obj_set_size(notificationIcon, 10, 10);
+  lv_label_set_text(notificationIcon, WatchFaceModern::GetIcon(false));
+  lv_obj_align(notificationIcon, nullptr, LV_ALIGN_IN_TOP_RIGHT, -10, 5);
 
   labelDate = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_align(labelDate, lv_scr_act(), LV_ALIGN_IN_RIGHT_MID, 0, 0);
@@ -57,7 +58,7 @@ WatchFaceModern::WatchFaceModern(DisplayApp* app,
   stepValue = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(stepValue, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
   lv_obj_set_style_local_text_font(stepValue, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &teko_28);
-  lv_obj_align(stepValue, lv_scr_act(), LV_ALIGN_IN_BOTTOM_RIGHT, -5, 0);
+  lv_obj_align(stepValue, lv_scr_act(), LV_ALIGN_IN_BOTTOM_RIGHT, 8, 0);
   lv_label_set_text(stepValue, "0");
 
   stepIcon = lv_label_create(lv_scr_act(), nullptr);
@@ -77,7 +78,8 @@ WatchFaceModern::~WatchFaceModern() {
 void WatchFaceModern::Refresh() {
   notificationState = notificationManager.AreNewNotificationsAvailable();
   if (notificationState.IsUpdated()) {
-    lv_label_set_text(notificationIcon, NotificationIcon::GetIcon(notificationState.Get()));
+    lv_label_set_text(notificationIcon, WatchFaceModern::GetIcon(notificationState.Get()));
+    lv_obj_align(notificationIcon, nullptr, LV_ALIGN_IN_TOP_RIGHT, -10, 5);
   }
 
   currentDateTime = dateTimeController.CurrentDateTime();
@@ -138,7 +140,14 @@ void WatchFaceModern::Refresh() {
   motionSensorOk = motionController.IsSensorOk();
   if (stepCount.IsUpdated() || motionSensorOk.IsUpdated()) {
     lv_label_set_text_fmt(stepValue, "%lu", stepCount.Get());
-    lv_obj_align(stepValue, lv_scr_act(), LV_ALIGN_IN_BOTTOM_MID, 20, 0);
+    lv_obj_align(stepValue, lv_scr_act(), LV_ALIGN_IN_BOTTOM_MID, 5, 0);
     lv_obj_align(stepIcon, stepValue, LV_ALIGN_OUT_LEFT_MID, -5, 0);
   }
+}
+
+const char* WatchFaceModern::GetIcon(bool newNotificationAvailable) {
+  if (newNotificationAvailable)
+    return Symbols::circle;
+  else
+    return "";
 }
