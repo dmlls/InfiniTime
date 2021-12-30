@@ -24,6 +24,9 @@ namespace Pinetime {
         Colors ColorBar = Colors::Teal;
         Colors ColorBG = Colors::Black;
       };
+      struct WatchFaceModern {
+        bool showSideCover = true;
+      };
 
       Settings(Pinetime::Controllers::FS& fs);
 
@@ -65,6 +68,15 @@ namespace Pinetime {
       };
       Colors GetPTSColorBG() const {
         return settings.PTS.ColorBG;
+      };
+
+      void SetShowSideCover(bool show) {
+        if (show != settings.watchFaceModern.showSideCover)
+          settingsChanged = true;
+        settings.watchFaceModern.showSideCover = show;
+      };
+      bool GetShowSideCover() const {
+        return settings.watchFaceModern.showSideCover;
       };
 
       void SetAppMenu(uint8_t menu) {
@@ -174,6 +186,8 @@ namespace Pinetime {
         uint8_t clockFace = 3;
 
         PineTimeStyle PTS;
+
+        WatchFaceModern watchFaceModern;
 
         std::bitset<3> wakeUpMode {0};
 

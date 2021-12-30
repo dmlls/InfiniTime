@@ -29,9 +29,12 @@ WatchFaceModern::WatchFaceModern(DisplayApp* app,
     motionController {motionController} {
   settingsController.SetClockFace(3);
   
-  sideCover = lv_img_create(lv_scr_act(), nullptr);
-  lv_img_set_src(sideCover, &side_cover);
-  lv_obj_align(sideCover, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 0, 0);
+  if(settingsController.GetShowSideCover()) {
+    sideCover = lv_img_create(lv_scr_act(), nullptr);
+    lv_img_set_src(sideCover, &side_cover);
+    lv_obj_set_height(sideCover, 240);
+    lv_obj_align(sideCover, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 0, 0);
+  }
 
   notificationIcon = lv_obj_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_bg_color(notificationIcon, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xE85102));

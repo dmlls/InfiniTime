@@ -59,12 +59,28 @@ std::unique_ptr<Screen> Settings::CreateScreen2() {
 
 std::unique_ptr<Screen> Settings::CreateScreen3() {
 
-  std::array<Screens::List::Applications, 4> applications {{
+  std::vector<Screens::List::Applications> apps {{
     {Symbols::check, "Firmware", Apps::FirmwareValidation},
     {Symbols::list, "About", Apps::SysInfo},
     {Symbols::none, "None", Apps::None},
     {Symbols::none, "None", Apps::None}
   }};
+
+  if (settingsController.GetClockFace() == 2) { // PineTimeSylte
+    apps.insert(
+      apps.begin(),
+      {Symbols::paintbrush, "PTS Colors", Apps::SettingPineTimeStyle}
+    );
+  } else if (settingsController.GetClockFace() == 3) {  // WatchFaceModern
+    apps.insert(
+      apps.begin(),
+      {Symbols::paintbrush, "Side Cover", Apps::SettingWatchFaceModern}
+    );
+  }
+
+  // Move only the 4 first elements of std::vector to std::array
+  std::array<Screens::List::Applications, 4> applications;
+  std::move(apps.begin(), apps.begin() + 3, applications.begin());
 
   return std::make_unique<Screens::List>(2, 3, app, settingsController, applications);
 }
