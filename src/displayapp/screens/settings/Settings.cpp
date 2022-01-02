@@ -66,12 +66,7 @@ std::unique_ptr<Screen> Settings::CreateScreen3() {
     {Symbols::none, "None", Apps::None}
   }};
 
-  if (settingsController.GetClockFace() == 2) { // PineTimeSylte
-    apps.insert(
-      apps.begin(),
-      {Symbols::paintbrush, "PTS Colors", Apps::SettingPineTimeStyle}
-    );
-  } else if (settingsController.GetClockFace() == 3) {  // WatchFaceInfineat
+  if (settingsController.GetClockFace() == 3) {  // WatchFaceInfineat
     apps.insert(
       apps.begin(),
       {Symbols::paintbrush, "Side Cover", Apps::SettingWatchFaceInfineat}
