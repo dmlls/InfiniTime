@@ -71,10 +71,10 @@ std::unique_ptr<Screen> Settings::CreateScreen3() {
       apps.begin(),
       {Symbols::paintbrush, "PTS Colors", Apps::SettingPineTimeStyle}
     );
-  } else if (settingsController.GetClockFace() == 3) {  // WatchFaceModern
+  } else if (settingsController.GetClockFace() == 3) {  // WatchFaceInfineat
     apps.insert(
       apps.begin(),
-      {Symbols::paintbrush, "Side Cover", Apps::SettingWatchFaceModern}
+      {Symbols::paintbrush, "Side Cover", Apps::SettingWatchFaceInfineat}
     );
   }
 

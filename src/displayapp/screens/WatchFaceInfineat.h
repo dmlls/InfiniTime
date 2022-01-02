@@ -18,14 +18,14 @@ namespace Pinetime {
   namespace Applications {
     namespace Screens {
 
-      class WatchFaceModern : public Screen {
+      class WatchFaceInfineat : public Screen {
       public:
-        WatchFaceModern(DisplayApp* app,
+        WatchFaceInfineat(DisplayApp* app,
                          Controllers::DateTime& dateTimeController,
                          Controllers::NotificationManager& notificationManager,
                          Controllers::Settings& settingsController,
                          Controllers::MotionController& motionController);
-        ~WatchFaceModern() override;
+        ~WatchFaceInfineat() override;
 
         void Refresh() override;
 

@@ -12,10 +12,10 @@ namespace Pinetime {
   namespace Applications {
     namespace Screens {
 
-      class SettingWatchFaceModern : public Screen {
+      class SettingWatchFaceInfineat : public Screen {
       public:
-        SettingWatchFaceModern(DisplayApp* app, Pinetime::Controllers::Settings& settingsController);
-        ~SettingWatchFaceModern() override;
+        SettingWatchFaceInfineat(DisplayApp* app, Pinetime::Controllers::Settings& settingsController);
+        ~SettingWatchFaceInfineat() override;
 
         void UpdateSelected(lv_obj_t* object, lv_event_t event);
 

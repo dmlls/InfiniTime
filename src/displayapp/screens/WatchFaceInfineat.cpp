@@ -1,4 +1,4 @@
-#include "displayapp/screens/WatchFaceModern.h"
+#include "displayapp/screens/WatchFaceInfineat.h"
 
 #include <date/date.h>
 #include <lvgl/lvgl.h>
@@ -12,7 +12,7 @@ using namespace Pinetime::Applications::Screens;
 
 LV_IMG_DECLARE(logo_pine);
 
-WatchFaceModern::WatchFaceModern(DisplayApp* app,
+WatchFaceInfineat::WatchFaceInfineat(DisplayApp* app,
                                    Controllers::DateTime& dateTimeController,
                                    Controllers::NotificationManager& notificationManager,
                                    Controllers::Settings& settingsController,
@@ -154,7 +154,7 @@ WatchFaceModern::WatchFaceModern(DisplayApp* app,
   Refresh();
 }
 
-WatchFaceModern::~WatchFaceModern() {
+WatchFaceInfineat::~WatchFaceInfineat() {
   lv_task_del(taskRefresh);
 
   if(settingsController.GetShowSideCover()) {
@@ -172,7 +172,7 @@ WatchFaceModern::~WatchFaceModern() {
   lv_obj_clean(lv_scr_act());
 }
 
-void WatchFaceModern::Refresh() {
+void WatchFaceInfineat::Refresh() {
   notificationState = notificationManager.AreNewNotificationsAvailable();
   if (notificationState.IsUpdated()) {
     lv_obj_set_hidden(notificationIcon, !notificationState.Get());

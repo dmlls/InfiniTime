@@ -46,7 +46,7 @@
 #include "displayapp/screens/settings/SettingDisplay.h"
 #include "displayapp/screens/settings/SettingSteps.h"
 #include "displayapp/screens/settings/SettingPineTimeStyle.h"
-#include "displayapp/screens/settings/SettingWatchFaceModern.h"
+#include "displayapp/screens/settings/SettingWatchFaceInfineat.h"
 #include "displayapp/screens/settings/SettingSetDate.h"
 #include "displayapp/screens/settings/SettingSetTime.h"
 
@@ -421,8 +421,8 @@ void DisplayApp::LoadApp(Apps app, DisplayApp::FullRefreshDirections direction) 
       currentScreen = std::make_unique<Screens::SettingPineTimeStyle>(this, settingsController);
       ReturnApp(Apps::Settings, FullRefreshDirections::Down, TouchEvents::SwipeDown);
       break;
-    case Apps::SettingWatchFaceModern:
-      currentScreen = std::make_unique<Screens::SettingWatchFaceModern>(this, settingsController);
+    case Apps::SettingWatchFaceInfineat:
+      currentScreen = std::make_unique<Screens::SettingWatchFaceInfineat>(this, settingsController);
       ReturnApp(Apps::Settings, FullRefreshDirections::Down, TouchEvents::SwipeDown);
       break;
     case Apps::BatteryInfo:

@@ -447,7 +447,7 @@ list(APPEND SOURCE_FILES
         displayapp/screens/settings/SettingSteps.cpp
         displayapp/screens/settings/SettingSetDate.cpp
         displayapp/screens/settings/SettingSetTime.cpp
-        displayapp/screens/settings/SettingWatchFaceModern.cpp
+        displayapp/screens/settings/SettingWatchFaceInfineat.cpp
 
         ## Watch faces
         displayapp/icons/bg_clock.c
@@ -455,7 +455,7 @@ list(APPEND SOURCE_FILES
         displayapp/screens/WatchFaceAnalog.cpp
         displayapp/screens/WatchFaceDigital.cpp
         displayapp/screens/PineTimeStyle.cpp
-        displayapp/screens/WatchFaceModern.cpp
+        displayapp/screens/WatchFaceInfineat.cpp
 
         ##
 

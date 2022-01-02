@@ -35,7 +35,7 @@ namespace Pinetime {
       SettingWakeUp,
       SettingSteps,
       SettingPineTimeStyle,
-      SettingWatchFaceModern,
+      SettingWatchFaceInfineat,
       SettingSetDate,
       SettingSetTime,
       Error,

@@ -1,4 +1,4 @@
-#include "displayapp/screens/settings/SettingWatchFaceModern.h"
+#include "displayapp/screens/settings/SettingWatchFaceInfineat.h"
 #include <lvgl/lvgl.h>
 #include "displayapp/DisplayApp.h"
 #include "displayapp/screens/Styles.h"
@@ -9,14 +9,14 @@ using namespace Pinetime::Applications::Screens;
 
 namespace {
   static void event_handler(lv_obj_t* obj, lv_event_t event) {
-    SettingWatchFaceModern* screen = static_cast<SettingWatchFaceModern*>(obj->user_data);
+    SettingWatchFaceInfineat* screen = static_cast<SettingWatchFaceInfineat*>(obj->user_data);
     screen->UpdateSelected(obj, event);
   }
 }
 
-constexpr std::array<const char*, 2> SettingWatchFaceModern::options;
+constexpr std::array<const char*, 2> SettingWatchFaceInfineat::options;
 
-SettingWatchFaceModern::SettingWatchFaceModern(Pinetime::Applications::DisplayApp* app, Pinetime::Controllers::Settings& settingsController)
+SettingWatchFaceInfineat::SettingWatchFaceInfineat(Pinetime::Applications::DisplayApp* app, Pinetime::Controllers::Settings& settingsController)
   : Screen(app), settingsController {settingsController} {
 
   lv_obj_t* container1 = lv_cont_create(lv_scr_act(), nullptr);
@@ -57,12 +57,12 @@ SettingWatchFaceModern::SettingWatchFaceModern(Pinetime::Applications::DisplayAp
   }
 }
 
-SettingWatchFaceModern::~SettingWatchFaceModern() {
+SettingWatchFaceInfineat::~SettingWatchFaceInfineat() {
   lv_obj_clean(lv_scr_act());
   settingsController.SaveSettings();
 }
 
-void SettingWatchFaceModern::UpdateSelected(lv_obj_t* object, lv_event_t event) {
+void SettingWatchFaceInfineat::UpdateSelected(lv_obj_t* object, lv_event_t event) {
   if (event == LV_EVENT_VALUE_CHANGED) {
     for (unsigned int i = 0; i < options.size(); i++) {
       if (object == cbOption[i]) {
