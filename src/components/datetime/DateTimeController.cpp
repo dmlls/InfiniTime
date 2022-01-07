@@ -76,6 +76,24 @@ void DateTime::UpdateTime(uint32_t systickCounter) {
   minute = time.minutes().count();
   second = time.seconds().count();
 
+  if (minute == 0 && !isHourAlreadyNotified) {
+    isHourAlreadyNotified = true;
+    if (systemTask != nullptr) {
+      systemTask->PushMessage(System::Messages::OnNewHour);
+    }
+  } else if (minute != 0) {
+    isHourAlreadyNotified = false;
+  }
+
+  if ((minute == 0 || minute == 30) && !isHalfHourAlreadyNotified) {
+    isHalfHourAlreadyNotified = true;
+    if (systemTask != nullptr) {
+      systemTask->PushMessage(System::Messages::OnNewHalfHour);
+    }
+  } else if (minute != 0 && minute != 30) {
+    isHalfHourAlreadyNotified = false;
+  }
+
   // Notify new day to SystemTask
   if (hour == 0 and not isMidnightAlreadyNotified) {
     isMidnightAlreadyNotified = true;
@@ -105,4 +123,3 @@ const char* DateTime::DayOfWeekShortToStringLow() {
 void DateTime::Register(Pinetime::System::SystemTask* systemTask) {
   this->systemTask = systemTask;
 }
-

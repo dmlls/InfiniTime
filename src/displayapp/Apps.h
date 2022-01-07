@@ -37,7 +37,9 @@ namespace Pinetime {
       SettingWatchFaceInfineat,
       SettingSetDate,
       SettingSetTime,
-      Error,
+      SettingChimes,
+      SettingShakeThreshold,
+      Error
     };
   }
 }

@@ -47,35 +47,34 @@ std::unique_ptr<Screen> Settings::CreateScreen1() {
 
 std::unique_ptr<Screen> Settings::CreateScreen2() {
 
-  std::array<Screens::List::Applications, 4> applications {{
-    {Symbols::shoe, "Steps", Apps::SettingSteps},
-    {Symbols::clock, "Set date", Apps::SettingSetDate},
-    {Symbols::clock, "Set time", Apps::SettingSetTime},
-    {Symbols::batteryHalf, "Battery", Apps::BatteryInfo}
-  }};
+  std::array<Screens::List::Applications, 4> applications {{{Symbols::shoe, "Steps", Apps::SettingSteps},
+                                                            {Symbols::clock, "Set date", Apps::SettingSetDate},
+                                                            {Symbols::clock, "Set time", Apps::SettingSetTime},
+                                                            {Symbols::batteryHalf, "Battery", Apps::BatteryInfo}}};
 
   return std::make_unique<Screens::List>(1, 3, app, settingsController, applications);
 }
 
 std::unique_ptr<Screen> Settings::CreateScreen3() {
 
-  std::vector<Screens::List::Applications> apps {{
+  std::array<Screens::List::Applications, 4> applications {{
+    {Symbols::clock, "Chimes", Apps::SettingChimes},
+    {Symbols::none, "Wake Sense", Apps::SettingShakeThreshold},
     {Symbols::check, "Firmware", Apps::FirmwareValidation},
-    {Symbols::list, "About", Apps::SysInfo},
-    {Symbols::none, "None", Apps::None},
-    {Symbols::none, "None", Apps::None}
+    {Symbols::list, "About", Apps::SysInfo}
   }};
 
-  if (settingsController.GetClockFace() == 3) {  // WatchFaceInfineat
-    apps.insert(
-      apps.begin(),
-      {Symbols::paintbrush, "Side Cover", Apps::SettingWatchFaceInfineat}
-    );
-  }
+  // TODO: review
+  // if (settingsController.GetClockFace() == 3) {  // WatchFaceInfineat
+  //   apps.insert(
+  //     apps.begin(),
+  //     {Symbols::paintbrush, "Side Cover", Apps::SettingWatchFaceInfineat}
+  //   );
+  // }
 
-  // Move only the 4 first elements of std::vector to std::array
-  std::array<Screens::List::Applications, 4> applications;
-  std::move(apps.begin(), apps.begin() + 3, applications.begin());
+  // // Move only the 4 first elements of std::vector to std::array
+  // std::array<Screens::List::Applications, 4> applications;
+  // std::move(apps.begin(), apps.begin() + 3, applications.begin());
 
   return std::make_unique<Screens::List>(2, 3, app, settingsController, applications);
 }
