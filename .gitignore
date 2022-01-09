@@ -43,6 +43,7 @@ Testing/Temporary/
 #VSCODE
 .vscode/.cortex-debug.registers.state.json
 .vscode/.cortex-debug.peripherals.state.json
+.vscode/settings.json
 
 #build files
 src/nRF5_SDK_15.3.0_59ac345
