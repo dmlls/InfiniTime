@@ -46,7 +46,7 @@ Clock::Clock(DisplayApp* app,
           return WatchFaceInfineatScreen();
           break;
       }
-      return WatchFaceInfineatScreen();
+      return WatchFaceDigitalScreen();
     }()} {
   settingsController.SetAppMenu(0);
 }
@@ -91,8 +91,8 @@ std::unique_ptr<Screen> Clock::PineTimeStyleScreen() {
 
 std::unique_ptr<Screen> Clock::WatchFaceInfineatScreen() {
   return std::make_unique<Screens::WatchFaceInfineat>(app,
-                                                    dateTimeController,
-                                                    notificationManager,
-                                                    settingsController,
-                                                    motionController);
+                                                      dateTimeController,
+                                                      notificationManager,
+                                                      settingsController,
+                                                      motionController);
 }

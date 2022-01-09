@@ -10,6 +10,13 @@
 
 using namespace Pinetime::Applications::Screens;
 
+namespace {
+  void event_handler(lv_obj_t* obj, lv_event_t event) {
+    auto* screen = static_cast<WatchFaceInfineat*>(obj->user_data);
+    screen->UpdateSelected(obj, event);
+  }
+}
+
 LV_IMG_DECLARE(logo_pine);
 
 WatchFaceInfineat::WatchFaceInfineat(DisplayApp* app,
@@ -23,8 +30,8 @@ WatchFaceInfineat::WatchFaceInfineat(DisplayApp* app,
     notificationManager {notificationManager},
     settingsController {settingsController},
     motionController {motionController} {
-  settingsController.SetClockFace(3);
-  
+
+  // Display side cover?
   if(settingsController.GetShowSideCover()) {
     line1 = lv_line_create(lv_scr_act(), nullptr);
     line2 = lv_line_create(lv_scr_act(), nullptr);
@@ -150,6 +157,79 @@ WatchFaceInfineat::WatchFaceInfineat(DisplayApp* app,
   lv_label_set_text(stepIcon, Symbols::shoe);
   lv_obj_align(stepIcon, stepValue, LV_ALIGN_OUT_LEFT_MID, -5, 0);
 
+  // Setting buttons
+  btnClose = lv_btn_create(lv_scr_act(), nullptr);
+  btnClose->user_data = this;
+  lv_obj_set_size(btnClose, 60, 60);
+  lv_obj_align(btnClose, lv_scr_act(), LV_ALIGN_CENTER, 0, -80);
+  lv_obj_set_style_local_bg_opa(btnClose, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_50);
+  lv_obj_set_style_local_value_str(btnClose, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, "X");
+  lv_obj_set_event_cb(btnClose, event_handler);
+  lv_obj_set_hidden(btnClose, true);
+
+  btnNextColor = lv_btn_create(lv_scr_act(), nullptr);
+  btnNextColor->user_data = this;
+  lv_obj_set_size(btnNextColor, 60, 60);
+  lv_obj_align(btnNextColor, lv_scr_act(), LV_ALIGN_IN_RIGHT_MID, -15, 0);
+  lv_obj_set_style_local_bg_opa(btnNextColor, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_50);
+  lv_obj_set_style_local_value_str(btnNextColor, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, ">");
+  lv_obj_set_event_cb(btnNextColor, event_handler);
+  lv_obj_set_hidden(btnNextColor, true);
+
+  btnPrevColor = lv_btn_create(lv_scr_act(), nullptr);
+  btnPrevColor->user_data = this;
+  lv_obj_set_size(btnPrevColor, 60, 60);
+  lv_obj_align(btnPrevColor, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 15, 0);
+  lv_obj_set_style_local_bg_opa(btnPrevColor, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_50);
+  lv_obj_set_style_local_value_str(btnPrevColor, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, "<");
+  lv_obj_set_event_cb(btnPrevColor, event_handler);
+  lv_obj_set_hidden(btnPrevColor, true);
+
+  // Sets whether or not to display the Bluetooth icon when connected
+  btnBluetooth = lv_btn_create(lv_scr_act(), nullptr);
+  btnBluetooth->user_data = this;
+  lv_obj_set_size(btnBluetooth, 60, 60);
+  lv_obj_align(btnBluetooth, lv_scr_act(), LV_ALIGN_CENTER, 0, 80);
+  lv_obj_set_style_local_bg_opa(btnBluetooth, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_50);
+  lv_obj_set_event_cb(btnBluetooth, event_handler);
+  labelBtnBluetooth = lv_label_create(btnBluetooth, nullptr);
+  lv_label_set_text_static(labelBtnBluetooth, Symbols::bluetooth);
+  lv_obj_set_hidden(btnBluetooth, true);
+  // Use to cross out the Bluetooth symbol (i.e., Bluetooth symbol disabled)
+  // Background line
+  lineBgBtnBluetooth = lv_line_create(lv_scr_act(), nullptr);
+  lv_style_init(&lineBgBtnBluetoothStyle);
+  lv_style_set_line_width(&lineBgBtnBluetoothStyle, LV_STATE_DEFAULT, 4);
+  lv_style_set_line_color(&lineBgBtnBluetoothStyle, LV_STATE_DEFAULT, LV_COLOR_BLACK);
+  lv_obj_add_style(lineBgBtnBluetooth, LV_LINE_PART_MAIN, &lineBgBtnBluetoothStyle);
+  lineBgBtnBluetoothPoints[0] = {30, 50};
+  lineBgBtnBluetoothPoints[1] = {34, 54};
+  lv_line_set_points(lineBgBtnBluetooth, lineBgBtnBluetoothPoints, 2);
+  lv_obj_set_hidden(lineBgBtnBluetooth, true);
+  // Foreground line
+  lineBtnBluetooth = lv_line_create(lv_scr_act(), nullptr);
+  lv_style_init(&lineBtnBluetoothStyle);
+  lv_style_set_line_width(&lineBtnBluetoothStyle, LV_STATE_DEFAULT, 1);
+  lv_style_set_line_color(&lineBtnBluetoothStyle, LV_STATE_DEFAULT, LV_COLOR_WHITE);
+  lv_obj_add_style(lineBtnBluetooth, LV_LINE_PART_MAIN, &lineBtnBluetoothStyle);
+  lineBtnBluetoothPoints[0] = {30, 50};
+  lineBtnBluetoothPoints[1] = {34, 54};
+  lv_line_set_points(lineBtnBluetooth, lineBtnBluetoothPoints, 2);
+  lv_obj_set_hidden(lineBtnBluetooth, lv_obj_get_hidden(lineBgBtnBluetooth));
+
+  // Button to access the settings
+  btnSettings = lv_btn_create(lv_scr_act(), nullptr);
+  btnSettings->user_data = this;
+  lv_obj_set_size(btnSettings, 150, 150);
+  lv_obj_align(btnSettings, lv_scr_act(), LV_ALIGN_CENTER, 0, 0);
+  lv_obj_set_style_local_radius(btnSettings, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 30);
+  lv_obj_set_style_local_bg_opa(btnSettings, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_50);
+  lv_obj_set_event_cb(btnSettings, event_handler);
+  labelBtnSettings = lv_label_create(btnSettings, nullptr);
+  lv_obj_set_style_local_text_font(labelBtnSettings, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &lv_font_sys_48);
+  lv_label_set_text_static(labelBtnSettings, Symbols::settings);
+  lv_obj_set_hidden(btnSettings, true);
+
   taskRefresh = lv_task_create(RefreshTaskCallback, LV_DISP_DEF_REFR_PERIOD, LV_TASK_PRIO_MID, this);
   Refresh();
 }
@@ -169,7 +249,53 @@ WatchFaceInfineat::~WatchFaceInfineat() {
     lv_style_reset(&line9Style);
   }
 
+  lv_style_reset(&lineBgBtnBluetoothStyle);
+  lv_style_reset(&lineBtnBluetoothStyle);
   lv_obj_clean(lv_scr_act());
+}
+
+bool WatchFaceInfineat::OnTouchEvent(Pinetime::Applications::TouchEvents event) {
+  if ((event == Pinetime::Applications::TouchEvents::LongTap) && lv_obj_get_hidden(btnSettings)) {
+    lv_obj_set_hidden(btnSettings, false);
+    savedTick = lv_tick_get();
+    return true;
+  }
+  return false;
+}
+
+void WatchFaceInfineat::CloseMenu() {
+  settingsController.SaveSettings();
+  lv_obj_set_hidden(btnClose, true);
+  lv_obj_set_hidden(btnNextColor, true);
+  lv_obj_set_hidden(btnPrevColor, true);
+  lv_obj_set_hidden(btnBluetooth, true);
+  lv_obj_set_hidden(lineBgBtnBluetooth, true);
+  lv_obj_set_hidden(lineBtnBluetooth, true);
+}
+
+bool WatchFaceInfineat::OnButtonPushed() {
+  if (!lv_obj_get_hidden(btnClose)) {
+    CloseMenu();
+    return true;
+  }
+  return false;
+}
+
+void WatchFaceInfineat::UpdateSelected(lv_obj_t* object, lv_event_t event) {
+  if (event == LV_EVENT_CLICKED) {
+    if (object == btnSettings) {
+        lv_obj_set_hidden(btnSettings, true);
+        lv_obj_set_hidden(btnNextColor, false);
+        lv_obj_set_hidden(btnPrevColor, false);
+        lv_obj_set_hidden(btnBluetooth, false);
+        lv_obj_set_hidden(lineBgBtnBluetooth, false);
+        lv_obj_set_hidden(lineBtnBluetooth, false);
+    }
+    if (object == btnClose) {
+      CloseMenu();
+    }
+    // TODO
+  }
 }
 
 void WatchFaceInfineat::Refresh() {
@@ -251,5 +377,12 @@ void WatchFaceInfineat::Refresh() {
     lv_label_set_text_fmt(stepValue, "%lu", stepCount.Get());
     lv_obj_align(stepValue, lv_scr_act(), LV_ALIGN_IN_BOTTOM_MID, 10, 0);
     lv_obj_align(stepIcon, stepValue, LV_ALIGN_OUT_LEFT_MID, -5, 0);
+  }
+
+  if (!lv_obj_get_hidden(btnSettings)) {
+    if ((savedTick > 0) && (lv_tick_get() - savedTick > 3000)) {
+      lv_obj_set_hidden(btnSettings, true);
+      savedTick = 0;
+    }
   }
 }

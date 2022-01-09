@@ -45,7 +45,6 @@
 #include "displayapp/screens/settings/SettingWakeUp.h"
 #include "displayapp/screens/settings/SettingDisplay.h"
 #include "displayapp/screens/settings/SettingSteps.h"
-#include "displayapp/screens/settings/SettingWatchFaceInfineat.h"
 #include "displayapp/screens/settings/SettingSetDate.h"
 #include "displayapp/screens/settings/SettingSetTime.h"
 #include "displayapp/screens/settings/SettingChimes.h"
@@ -421,8 +420,6 @@ void DisplayApp::LoadApp(Apps app, DisplayApp::FullRefreshDirections direction) 
       currentScreen = std::make_unique<Screens::SettingSetTime>(this, dateTimeController);
       ReturnApp(Apps::Settings, FullRefreshDirections::Down, TouchEvents::SwipeDown);
       break;
-    case Apps::SettingWatchFaceInfineat:
-      currentScreen = std::make_unique<Screens::SettingWatchFaceInfineat>(this, settingsController);
     case Apps::SettingChimes:
       currentScreen = std::make_unique<Screens::SettingChimes>(this, settingsController);
       ReturnApp(Apps::Settings, FullRefreshDirections::Down, TouchEvents::SwipeDown);

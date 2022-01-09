@@ -64,17 +64,5 @@ std::unique_ptr<Screen> Settings::CreateScreen3() {
     {Symbols::list, "About", Apps::SysInfo}
   }};
 
-  // TODO: review
-  // if (settingsController.GetClockFace() == 3) {  // WatchFaceInfineat
-  //   apps.insert(
-  //     apps.begin(),
-  //     {Symbols::paintbrush, "Side Cover", Apps::SettingWatchFaceInfineat}
-  //   );
-  // }
-
-  // // Move only the 4 first elements of std::vector to std::array
-  // std::array<Screens::List::Applications, 4> applications;
-  // std::move(apps.begin(), apps.begin() + 3, applications.begin());
-
   return std::make_unique<Screens::List>(2, 3, app, settingsController, applications);
 }

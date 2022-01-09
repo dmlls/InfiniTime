@@ -447,12 +447,8 @@ list(APPEND SOURCE_FILES
         displayapp/screens/settings/SettingSteps.cpp
         displayapp/screens/settings/SettingSetDate.cpp
         displayapp/screens/settings/SettingSetTime.cpp
-<<<<<<< HEAD
-        displayapp/screens/settings/SettingWatchFaceInfineat.cpp
-=======
         displayapp/screens/settings/SettingChimes.cpp
         displayapp/screens/settings/SettingShakeThreshold.cpp
->>>>>>> develop
 
         ## Watch faces
         displayapp/icons/bg_clock.c
