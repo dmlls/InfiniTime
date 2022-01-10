@@ -4,9 +4,11 @@
 #include <lvgl/lvgl.h>
 #include <cstdio>
 #include "displayapp/screens/Symbols.h"
-#include "components/ble/NotificationManager.h"
-#include "components/motion/MotionController.h"
+#include "displayapp/screens/BleIcon.h"
 #include "components/settings/Settings.h"
+#include "components/ble/NotificationManager.h"
+#include "components/ble/BleController.h"
+#include "components/motion/MotionController.h"
 
 using namespace Pinetime::Applications::Screens;
 
@@ -20,105 +22,105 @@ namespace {
 LV_IMG_DECLARE(logo_pine);
 
 WatchFaceInfineat::WatchFaceInfineat(DisplayApp* app,
-                                   Controllers::DateTime& dateTimeController,
-                                   Controllers::NotificationManager& notificationManager,
-                                   Controllers::Settings& settingsController,
-                                   Controllers::MotionController& motionController)
+                                     Controllers::DateTime& dateTimeController,
+                                     Controllers::Ble& bleController,
+                                     Controllers::NotificationManager& notificationManager,
+                                     Controllers::Settings& settingsController,
+                                     Controllers::MotionController& motionController)
   : Screen(app),
     currentDateTime {{}},
     dateTimeController {dateTimeController},
+    bleController {bleController},
     notificationManager {notificationManager},
     settingsController {settingsController},
     motionController {motionController} {
 
-  // Display side cover?
-  if(settingsController.GetShowSideCover()) {
-    line1 = lv_line_create(lv_scr_act(), nullptr);
-    line2 = lv_line_create(lv_scr_act(), nullptr);
-    line3 = lv_line_create(lv_scr_act(), nullptr);
-    line4 = lv_line_create(lv_scr_act(), nullptr);
-    line5 = lv_line_create(lv_scr_act(), nullptr);
-    line6 = lv_line_create(lv_scr_act(), nullptr);
-    line7 = lv_line_create(lv_scr_act(), nullptr);
-    line8 = lv_line_create(lv_scr_act(), nullptr);
-    line9 = lv_line_create(lv_scr_act(), nullptr);
+  // Side Cover
+  line1 = lv_line_create(lv_scr_act(), nullptr);
+  line2 = lv_line_create(lv_scr_act(), nullptr);
+  line3 = lv_line_create(lv_scr_act(), nullptr);
+  line4 = lv_line_create(lv_scr_act(), nullptr);
+  line5 = lv_line_create(lv_scr_act(), nullptr);
+  line6 = lv_line_create(lv_scr_act(), nullptr);
+  line7 = lv_line_create(lv_scr_act(), nullptr);
+  line8 = lv_line_create(lv_scr_act(), nullptr);
+  line9 = lv_line_create(lv_scr_act(), nullptr);
 
-    lv_style_init(&line1Style);
-    lv_style_set_line_width(&line1Style, LV_STATE_DEFAULT, 18);
-    lv_style_set_line_color(&line1Style, LV_STATE_DEFAULT, lv_color_hex(0xfd872b));
-    lv_obj_add_style(line1, LV_LINE_PART_MAIN, &line1Style);
-    line1Points[0] = {30, 25};
-    line1Points[1] = {68, -8};
-    lv_line_set_points(line1, line1Points, 2);
+  lv_style_init(&line1Style);
+  lv_style_set_line_width(&line1Style, LV_STATE_DEFAULT, 18);
+  lv_style_set_line_color(&line1Style, LV_STATE_DEFAULT, lv_color_hex(0xfd872b));
+  lv_obj_add_style(line1, LV_LINE_PART_MAIN, &line1Style);
+  line1Points[0] = {30, 25};
+  line1Points[1] = {68, -8};
+  lv_line_set_points(line1, line1Points, 2);
 
-    lv_style_init(&line2Style);
-    lv_style_set_line_width(&line2Style, LV_STATE_DEFAULT, 15);
-    lv_style_set_line_color(&line2Style, LV_STATE_DEFAULT, lv_color_hex(0xdb3316));
-    lv_obj_add_style(line2, LV_LINE_PART_MAIN, &line2Style);
-    line2Points[0] = {26, 167};
-    line2Points[1] = {43, 216};
-    lv_line_set_points(line2, line2Points, 2);
+  lv_style_init(&line2Style);
+  lv_style_set_line_width(&line2Style, LV_STATE_DEFAULT, 15);
+  lv_style_set_line_color(&line2Style, LV_STATE_DEFAULT, lv_color_hex(0xdb3316));
+  lv_obj_add_style(line2, LV_LINE_PART_MAIN, &line2Style);
+  line2Points[0] = {26, 167};
+  line2Points[1] = {43, 216};
+  lv_line_set_points(line2, line2Points, 2);
 
-    lv_style_init(&line3Style);
-    lv_style_set_line_width(&line3Style, LV_STATE_DEFAULT, 14);
-    lv_style_set_line_color(&line3Style, LV_STATE_DEFAULT, lv_color_hex(0x6f1000));
-    lv_obj_add_style(line3, LV_LINE_PART_MAIN, &line3Style);
-    line3Points[0] = {27, 40};
-    line3Points[1] = {27, 196};
-    lv_line_set_points(line3, line3Points, 2);
+  lv_style_init(&line3Style);
+  lv_style_set_line_width(&line3Style, LV_STATE_DEFAULT, 14);
+  lv_style_set_line_color(&line3Style, LV_STATE_DEFAULT, lv_color_hex(0x6f1000));
+  lv_obj_add_style(line3, LV_LINE_PART_MAIN, &line3Style);
+  line3Points[0] = {27, 40};
+  line3Points[1] = {27, 196};
+  lv_line_set_points(line3, line3Points, 2);
 
-    lv_style_init(&line4Style);
-    lv_style_set_line_width(&line4Style, LV_STATE_DEFAULT, 22);
-    lv_style_set_line_color(&line4Style, LV_STATE_DEFAULT, lv_color_hex(0xfd7a0a));
-    lv_obj_add_style(line4, LV_LINE_PART_MAIN, &line4Style);
-    line4Points[0] = {12, 182};
-    line4Points[1] = {65, 249};
-    lv_line_set_points(line4, line4Points, 2);
+  lv_style_init(&line4Style);
+  lv_style_set_line_width(&line4Style, LV_STATE_DEFAULT, 22);
+  lv_style_set_line_color(&line4Style, LV_STATE_DEFAULT, lv_color_hex(0xfd7a0a));
+  lv_obj_add_style(line4, LV_LINE_PART_MAIN, &line4Style);
+  line4Points[0] = {12, 182};
+  line4Points[1] = {65, 249};
+  lv_line_set_points(line4, line4Points, 2);
 
-    lv_style_init(&line5Style);
-    lv_style_set_line_width(&line5Style, LV_STATE_DEFAULT, 20);
-    lv_style_set_line_color(&line5Style, LV_STATE_DEFAULT, LV_COLOR_WHITE);
-    lv_obj_add_style(line5, LV_LINE_PART_MAIN, &line5Style);
-    line5Points[0] = {17, 99};
-    line5Points[1] = {17, 144};
-    lv_line_set_points(line5, line5Points, 2);
+  lv_style_init(&line5Style);
+  lv_style_set_line_width(&line5Style, LV_STATE_DEFAULT, 20);
+  lv_style_set_line_color(&line5Style, LV_STATE_DEFAULT, LV_COLOR_WHITE);
+  lv_obj_add_style(line5, LV_LINE_PART_MAIN, &line5Style);
+  line5Points[0] = {17, 99};
+  line5Points[1] = {17, 144};
+  lv_line_set_points(line5, line5Points, 2);
 
-    lv_style_init(&line6Style);
-    lv_style_set_line_width(&line6Style, LV_STATE_DEFAULT, 18);
-    lv_style_set_line_color(&line6Style, LV_STATE_DEFAULT, LV_COLOR_WHITE);
-    lv_obj_add_style(line6, LV_LINE_PART_MAIN, &line6Style);
-    line6Points[0] = {14, 81};
-    line6Points[1] = {40, 127};
-    lv_line_set_points(line6, line6Points, 2);
+  lv_style_init(&line6Style);
+  lv_style_set_line_width(&line6Style, LV_STATE_DEFAULT, 18);
+  lv_style_set_line_color(&line6Style, LV_STATE_DEFAULT, LV_COLOR_WHITE);
+  lv_obj_add_style(line6, LV_LINE_PART_MAIN, &line6Style);
+  line6Points[0] = {14, 81};
+  line6Points[1] = {40, 127};
+  lv_line_set_points(line6, line6Points, 2);
 
-    lv_style_init(&line7Style);
-    lv_style_set_line_width(&line7Style, LV_STATE_DEFAULT, 18);
-    lv_style_set_line_color(&line7Style, LV_STATE_DEFAULT, LV_COLOR_WHITE);
-    lv_obj_add_style(line7, LV_LINE_PART_MAIN, &line7Style);
-    line7Points[0] = {14, 163};
-    line7Points[1] = {40, 118};
-    lv_line_set_points(line7, line7Points, 2);
+  lv_style_init(&line7Style);
+  lv_style_set_line_width(&line7Style, LV_STATE_DEFAULT, 18);
+  lv_style_set_line_color(&line7Style, LV_STATE_DEFAULT, LV_COLOR_WHITE);
+  lv_obj_add_style(line7, LV_LINE_PART_MAIN, &line7Style);
+  line7Points[0] = {14, 163};
+  line7Points[1] = {40, 118};
+  lv_line_set_points(line7, line7Points, 2);
 
-    lv_style_init(&line8Style);
-    lv_style_set_line_width(&line8Style, LV_STATE_DEFAULT, 52);
-    lv_style_set_line_color(&line8Style, LV_STATE_DEFAULT, lv_color_hex(0xe85102));
-    lv_obj_add_style(line8, LV_LINE_PART_MAIN, &line8Style);
-    line8Points[0] = {-20, 124};
-    line8Points[1] = {25, -11};
-    lv_line_set_points(line8, line8Points, 2);
+  lv_style_init(&line8Style);
+  lv_style_set_line_width(&line8Style, LV_STATE_DEFAULT, 52);
+  lv_style_set_line_color(&line8Style, LV_STATE_DEFAULT, lv_color_hex(0xe85102));
+  lv_obj_add_style(line8, LV_LINE_PART_MAIN, &line8Style);
+  line8Points[0] = {-20, 124};
+  line8Points[1] = {25, -11};
+  lv_line_set_points(line8, line8Points, 2);
 
-    lv_style_init(&line9Style);
-    lv_style_set_line_width(&line9Style, LV_STATE_DEFAULT, 48);
-    lv_style_set_line_color(&line9Style, LV_STATE_DEFAULT, lv_color_hex(0xea1c00));
-    lv_obj_add_style(line9, LV_LINE_PART_MAIN, &line9Style);
-    line9Points[0] = {-29, 89};
-    line9Points[1] = {27, 254};
-    lv_line_set_points(line9, line9Points, 2);
+  lv_style_init(&line9Style);
+  lv_style_set_line_width(&line9Style, LV_STATE_DEFAULT, 48);
+  lv_style_set_line_color(&line9Style, LV_STATE_DEFAULT, lv_color_hex(0xea1c00));
+  lv_obj_add_style(line9, LV_LINE_PART_MAIN, &line9Style);
+  line9Points[0] = {-29, 89};
+  line9Points[1] = {27, 254};
+  lv_line_set_points(line9, line9Points, 2);
 
-    logoPine = lv_img_create(lv_scr_act(), nullptr);
-    lv_img_set_src(logoPine, &logo_pine);
-    lv_obj_set_pos(logoPine, 14, 105);
-  }
+  logoPine = lv_img_create(lv_scr_act(), nullptr);
+  lv_img_set_src(logoPine, &logo_pine);
+  lv_obj_set_pos(logoPine, 14, 105);
 
   notificationIcon = lv_obj_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_bg_color(notificationIcon, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xE85102));
@@ -146,6 +148,11 @@ WatchFaceInfineat::WatchFaceInfineat(DisplayApp* app,
   lv_obj_align(labelDate, lv_scr_act(), LV_ALIGN_IN_RIGHT_MID, 0, 0);
   lv_label_set_text(labelDate, "Mon 01");
 
+  bleIcon = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_color(bleIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
+  lv_label_set_text(bleIcon, Symbols::bluetooth);
+  lv_obj_align(bleIcon, labelDate, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
+
   stepValue = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(stepValue, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
   lv_obj_set_style_local_text_font(stepValue, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &teko_28);
@@ -162,7 +169,7 @@ WatchFaceInfineat::WatchFaceInfineat(DisplayApp* app,
   btnClose->user_data = this;
   lv_obj_set_size(btnClose, 60, 60);
   lv_obj_align(btnClose, lv_scr_act(), LV_ALIGN_CENTER, 0, -80);
-  lv_obj_set_style_local_bg_opa(btnClose, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_50);
+  lv_obj_set_style_local_bg_opa(btnClose, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_70);
   lv_obj_set_style_local_value_str(btnClose, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, "X");
   lv_obj_set_event_cb(btnClose, event_handler);
   lv_obj_set_hidden(btnClose, true);
@@ -171,7 +178,7 @@ WatchFaceInfineat::WatchFaceInfineat(DisplayApp* app,
   btnNextColor->user_data = this;
   lv_obj_set_size(btnNextColor, 60, 60);
   lv_obj_align(btnNextColor, lv_scr_act(), LV_ALIGN_IN_RIGHT_MID, -15, 0);
-  lv_obj_set_style_local_bg_opa(btnNextColor, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_50);
+  lv_obj_set_style_local_bg_opa(btnNextColor, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_70);
   lv_obj_set_style_local_value_str(btnNextColor, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, ">");
   lv_obj_set_event_cb(btnNextColor, event_handler);
   lv_obj_set_hidden(btnNextColor, true);
@@ -180,42 +187,19 @@ WatchFaceInfineat::WatchFaceInfineat(DisplayApp* app,
   btnPrevColor->user_data = this;
   lv_obj_set_size(btnPrevColor, 60, 60);
   lv_obj_align(btnPrevColor, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 15, 0);
-  lv_obj_set_style_local_bg_opa(btnPrevColor, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_50);
+  lv_obj_set_style_local_bg_opa(btnPrevColor, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_70);
   lv_obj_set_style_local_value_str(btnPrevColor, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, "<");
   lv_obj_set_event_cb(btnPrevColor, event_handler);
   lv_obj_set_hidden(btnPrevColor, true);
 
-  // Sets whether or not to display the Bluetooth icon when connected
-  btnBluetooth = lv_btn_create(lv_scr_act(), nullptr);
-  btnBluetooth->user_data = this;
-  lv_obj_set_size(btnBluetooth, 60, 60);
-  lv_obj_align(btnBluetooth, lv_scr_act(), LV_ALIGN_CENTER, 0, 80);
-  lv_obj_set_style_local_bg_opa(btnBluetooth, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_50);
-  lv_obj_set_event_cb(btnBluetooth, event_handler);
-  labelBtnBluetooth = lv_label_create(btnBluetooth, nullptr);
-  lv_label_set_text_static(labelBtnBluetooth, Symbols::bluetooth);
-  lv_obj_set_hidden(btnBluetooth, true);
-  // Use to cross out the Bluetooth symbol (i.e., Bluetooth symbol disabled)
-  // Background line
-  lineBgBtnBluetooth = lv_line_create(lv_scr_act(), nullptr);
-  lv_style_init(&lineBgBtnBluetoothStyle);
-  lv_style_set_line_width(&lineBgBtnBluetoothStyle, LV_STATE_DEFAULT, 4);
-  lv_style_set_line_color(&lineBgBtnBluetoothStyle, LV_STATE_DEFAULT, LV_COLOR_BLACK);
-  lv_obj_add_style(lineBgBtnBluetooth, LV_LINE_PART_MAIN, &lineBgBtnBluetoothStyle);
-  lineBgBtnBluetoothPoints[0] = {30, 50};
-  lineBgBtnBluetoothPoints[1] = {34, 54};
-  lv_line_set_points(lineBgBtnBluetooth, lineBgBtnBluetoothPoints, 2);
-  lv_obj_set_hidden(lineBgBtnBluetooth, true);
-  // Foreground line
-  lineBtnBluetooth = lv_line_create(lv_scr_act(), nullptr);
-  lv_style_init(&lineBtnBluetoothStyle);
-  lv_style_set_line_width(&lineBtnBluetoothStyle, LV_STATE_DEFAULT, 1);
-  lv_style_set_line_color(&lineBtnBluetoothStyle, LV_STATE_DEFAULT, LV_COLOR_WHITE);
-  lv_obj_add_style(lineBtnBluetooth, LV_LINE_PART_MAIN, &lineBtnBluetoothStyle);
-  lineBtnBluetoothPoints[0] = {30, 50};
-  lineBtnBluetoothPoints[1] = {34, 54};
-  lv_line_set_points(lineBtnBluetooth, lineBtnBluetoothPoints, 2);
-  lv_obj_set_hidden(lineBtnBluetooth, lv_obj_get_hidden(lineBgBtnBluetooth));
+  btnToggleCover = lv_btn_create(lv_scr_act(), nullptr);
+  btnToggleCover->user_data = this;
+  lv_obj_set_size(btnToggleCover, 60, 60);
+  lv_obj_align(btnToggleCover, lv_scr_act(), LV_ALIGN_CENTER, 0, 80);
+  lv_obj_set_style_local_bg_opa(btnToggleCover, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_70);
+  lv_obj_set_style_local_value_str(btnToggleCover, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, "ON");
+  lv_obj_set_event_cb(btnToggleCover, event_handler);
+  lv_obj_set_hidden(btnToggleCover, true);
 
   // Button to access the settings
   btnSettings = lv_btn_create(lv_scr_act(), nullptr);
@@ -223,7 +207,7 @@ WatchFaceInfineat::WatchFaceInfineat(DisplayApp* app,
   lv_obj_set_size(btnSettings, 150, 150);
   lv_obj_align(btnSettings, lv_scr_act(), LV_ALIGN_CENTER, 0, 0);
   lv_obj_set_style_local_radius(btnSettings, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 30);
-  lv_obj_set_style_local_bg_opa(btnSettings, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_50);
+  lv_obj_set_style_local_bg_opa(btnSettings, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_70);
   lv_obj_set_event_cb(btnSettings, event_handler);
   labelBtnSettings = lv_label_create(btnSettings, nullptr);
   lv_obj_set_style_local_text_font(labelBtnSettings, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &lv_font_sys_48);
@@ -249,8 +233,6 @@ WatchFaceInfineat::~WatchFaceInfineat() {
     lv_style_reset(&line9Style);
   }
 
-  lv_style_reset(&lineBgBtnBluetoothStyle);
-  lv_style_reset(&lineBtnBluetoothStyle);
   lv_obj_clean(lv_scr_act());
 }
 
@@ -268,9 +250,7 @@ void WatchFaceInfineat::CloseMenu() {
   lv_obj_set_hidden(btnClose, true);
   lv_obj_set_hidden(btnNextColor, true);
   lv_obj_set_hidden(btnPrevColor, true);
-  lv_obj_set_hidden(btnBluetooth, true);
-  lv_obj_set_hidden(lineBgBtnBluetooth, true);
-  lv_obj_set_hidden(lineBtnBluetooth, true);
+  lv_obj_set_hidden(btnToggleCover, true);
 }
 
 bool WatchFaceInfineat::OnButtonPushed() {
@@ -285,14 +265,18 @@ void WatchFaceInfineat::UpdateSelected(lv_obj_t* object, lv_event_t event) {
   if (event == LV_EVENT_CLICKED) {
     if (object == btnSettings) {
         lv_obj_set_hidden(btnSettings, true);
+        lv_obj_set_hidden(btnClose, false);
         lv_obj_set_hidden(btnNextColor, false);
         lv_obj_set_hidden(btnPrevColor, false);
-        lv_obj_set_hidden(btnBluetooth, false);
-        lv_obj_set_hidden(lineBgBtnBluetooth, false);
-        lv_obj_set_hidden(lineBtnBluetooth, false);
+        lv_obj_set_hidden(btnToggleCover, false);
     }
     if (object == btnClose) {
       CloseMenu();
+    }
+    if (object == btnToggleCover) {
+      bool hidden = ToggleShowSideCover();
+      const char *labelToggle = hidden ? "OFF" : "ON";
+      lv_obj_set_style_local_value_str(btnToggleCover, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, labelToggle);
     }
     // TODO
   }
@@ -371,6 +355,12 @@ void WatchFaceInfineat::Refresh() {
     }
   }
 
+  bleState = bleController.IsConnected();
+  if (bleState.IsUpdated()) {
+    lv_label_set_text(bleIcon, BleIcon::GetIcon(bleState.Get()));
+    lv_obj_align(bleIcon, labelDate, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
+  }
+
   stepCount = motionController.NbSteps();
   motionSensorOk = motionController.IsSensorOk();
   if (stepCount.IsUpdated() || motionSensorOk.IsUpdated()) {
@@ -385,4 +375,20 @@ void WatchFaceInfineat::Refresh() {
       savedTick = 0;
     }
   }
+}
+
+bool WatchFaceInfineat::ToggleShowSideCover() {
+  bool visible = !settingsController.GetShowSideCover();
+  settingsController.SetShowSideCover(visible);
+  lv_obj_set_hidden(logoPine, visible);
+  lv_obj_set_hidden(line1, visible);
+  lv_obj_set_hidden(line2, visible);
+  lv_obj_set_hidden(line3, visible);
+  lv_obj_set_hidden(line4, visible);
+  lv_obj_set_hidden(line5, visible);
+  lv_obj_set_hidden(line6, visible);
+  lv_obj_set_hidden(line7, visible);
+  lv_obj_set_hidden(line8, visible);
+  lv_obj_set_hidden(line9, visible);
+  return visible;
 }

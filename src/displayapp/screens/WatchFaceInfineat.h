@@ -21,10 +21,12 @@ namespace Pinetime {
       class WatchFaceInfineat : public Screen {
       public:
         WatchFaceInfineat(DisplayApp* app,
-                         Controllers::DateTime& dateTimeController,
-                         Controllers::NotificationManager& notificationManager,
-                         Controllers::Settings& settingsController,
-                         Controllers::MotionController& motionController);
+                          Controllers::DateTime& dateTimeController,
+                          Controllers::Ble& bleController,
+                          Controllers::NotificationManager& notificationManager,
+                          Controllers::Settings& settingsController,
+                          Controllers::MotionController& motionController);
+
         ~WatchFaceInfineat() override;
 
         bool OnTouchEvent(TouchEvents event) override;
@@ -61,8 +63,6 @@ namespace Pinetime {
         lv_obj_t* line7;
         lv_obj_t* line8;
         lv_obj_t* line9;
-        lv_obj_t* lineBgBtnBluetooth;
-        lv_obj_t* lineBtnBluetooth;
 
         lv_style_t line1Style;
         lv_style_t line2Style;
@@ -73,8 +73,6 @@ namespace Pinetime {
         lv_style_t line7Style;
         lv_style_t line8Style;
         lv_style_t line9Style;
-        lv_style_t lineBgBtnBluetoothStyle;
-        lv_style_t lineBtnBluetoothStyle;
 
         lv_point_t line1Points[2];
         lv_point_t line2Points[2];
@@ -85,8 +83,6 @@ namespace Pinetime {
         lv_point_t line7Points[2];
         lv_point_t line8Points[2];
         lv_point_t line9Points[2];
-        lv_point_t lineBgBtnBluetoothPoints[2];
-        lv_point_t lineBtnBluetoothPoints[2];
 
         lv_obj_t* logoPine;
 
@@ -94,23 +90,26 @@ namespace Pinetime {
         lv_obj_t* labelMinutes;
         lv_obj_t* labelTimeAmPm;
         lv_obj_t* labelDate;
+        lv_obj_t* bleIcon;
         lv_obj_t* stepIcon;
         lv_obj_t* stepValue;
         lv_obj_t* notificationIcon;
         lv_obj_t* btnClose;
         lv_obj_t* btnNextColor;
+        lv_obj_t* btnToggleCover;
         lv_obj_t* btnPrevColor;
-        lv_obj_t* btnBluetooth;
         lv_obj_t* btnSettings;
         lv_obj_t* labelBtnSettings;
-        lv_obj_t* labelBtnBluetooth;
 
         Controllers::DateTime& dateTimeController;
+        Controllers::Ble& bleController;
         Controllers::NotificationManager& notificationManager;
         Controllers::Settings& settingsController;
         Controllers::MotionController& motionController;
 
         lv_task_t* taskRefresh;
+
+        bool ToggleShowSideCover();
       };
     }
   }

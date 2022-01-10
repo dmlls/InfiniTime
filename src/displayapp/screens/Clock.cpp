@@ -92,6 +92,7 @@ std::unique_ptr<Screen> Clock::PineTimeStyleScreen() {
 std::unique_ptr<Screen> Clock::WatchFaceInfineatScreen() {
   return std::make_unique<Screens::WatchFaceInfineat>(app,
                                                       dateTimeController,
+                                                      bleController,
                                                       notificationManager,
                                                       settingsController,
                                                       motionController);
