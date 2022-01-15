@@ -53,7 +53,10 @@ namespace Pinetime {
         DirtyValue<uint32_t> stepCount {};
         DirtyValue<bool> notificationState {};
 
+        lv_obj_t* background;
+
         // Lines making up the side cover
+        lv_obj_t* line0;
         lv_obj_t* line1;
         lv_obj_t* line2;
         lv_obj_t* line3;
@@ -62,8 +65,8 @@ namespace Pinetime {
         lv_obj_t* line6;
         lv_obj_t* line7;
         lv_obj_t* line8;
-        lv_obj_t* line9;
 
+        lv_style_t line0Style;
         lv_style_t line1Style;
         lv_style_t line2Style;
         lv_style_t line3Style;
@@ -72,8 +75,8 @@ namespace Pinetime {
         lv_style_t line6Style;
         lv_style_t line7Style;
         lv_style_t line8Style;
-        lv_style_t line9Style;
 
+        lv_point_t line0Points[2];
         lv_point_t line1Points[2];
         lv_point_t line2Points[2];
         lv_point_t line3Points[2];
@@ -82,7 +85,6 @@ namespace Pinetime {
         lv_point_t line6Points[2];
         lv_point_t line7Points[2];
         lv_point_t line8Points[2];
-        lv_point_t line9Points[2];
 
         lv_obj_t* logoPine;
 
@@ -100,6 +102,18 @@ namespace Pinetime {
         lv_obj_t* btnPrevColor;
         lv_obj_t* btnSettings;
         lv_obj_t* labelBtnSettings;
+
+        static constexpr int nLines = 9;
+        static constexpr int nColors = 7; // must match number of colors in InfineatColors
+        struct InfineatColors {
+          int orange[nLines] = {0xfd872b, 0xdb3316, 0x6f1000, 0xfd7a0a, 0xffffff, 0xffffff, 0xffffff, 0xe85102, 0xea1c00};
+          int blue[nLines] = {0xe7f8ff, 0x2232d0, 0x182a8b, 0xe7f8ff, 0xffffff, 0xffffff, 0xffffff, 0x5991ff, 0x1636ff};
+          int green[nLines] = {0xb8ff9b, 0x088608, 0x004a00, 0xb8ff9b, 0xffffff, 0xffffff, 0xffffff, 0x62d515, 0x007400};
+          int rainbow[nLines] = {0x62d515, 0xac09c4, 0xfe0303, 0x0d57ff, 0xffffff, 0xffffff, 0xffffff, 0xfdff24, 0xe85102};
+          int gray[nLines] = {0xeeeeee, 0x98959b, 0x1d1d1d, 0xeeeeee, 0xffffff, 0xffffff, 0xffffff, 0x919191, 0x434343};
+          int nordBlue[nLines] = {0xc3daf2, 0x4d78ce, 0x183c5e, 0xc3daf2, 0xffffff, 0xffffff, 0xffffff, 0x5d8ad2, 0x2966ac};
+          int nordGreen[nLines] = {0xd5f0e9, 0x238373, 0x25514e, 0xd5f0e9, 0xffffff, 0xffffff, 0xffffff, 0x2fb8a2, 0x228f81};
+        } infineatColors;
 
         Controllers::DateTime& dateTimeController;
         Controllers::Ble& bleController;

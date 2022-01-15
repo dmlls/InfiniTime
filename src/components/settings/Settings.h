@@ -28,6 +28,7 @@ namespace Pinetime {
       };
       struct WatchFaceInfineat {
         bool showSideCover = true;
+        int colorIndex = 0;
       };
 
       Settings(Pinetime::Controllers::FS& fs);
@@ -82,13 +83,22 @@ namespace Pinetime {
         return settings.PTS.ColorBG;
       };
 
-      void SetShowSideCover(bool show) {
+      void SetInfineatShowSideCover(bool show) {
         if (show != settings.watchFaceInfineat.showSideCover)
           settingsChanged = true;
         settings.watchFaceInfineat.showSideCover = show;
       };
-      bool GetShowSideCover() const {
+      bool GetInfineatShowSideCover() const {
         return settings.watchFaceInfineat.showSideCover;
+      };
+
+      void SetInfineatColorIndex(int index) {
+        if (index != settings.watchFaceInfineat.colorIndex)
+          settingsChanged = true;
+        settings.watchFaceInfineat.colorIndex = index;
+      };
+      int GetInfineatColorIndex() const {
+        return settings.watchFaceInfineat.colorIndex;
       };
 
       void SetAppMenu(uint8_t menu) {
