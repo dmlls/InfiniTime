@@ -325,6 +325,7 @@ void WatchFaceInfineat::UpdateSelected(lv_obj_t* object, lv_event_t event) {
       lv_obj_set_hidden(line6, showSideCover);
       lv_obj_set_hidden(line7, showSideCover);
       lv_obj_set_hidden(line8, showSideCover);
+      lv_obj_set_hidden(lineBattery, showSideCover);
       lv_obj_set_hidden(btnNextColor, showSideCover);
       lv_obj_set_hidden(btnPrevColor, showSideCover);
       const char* labelToggle = showSideCover ? "OFF" : "ON";
@@ -359,6 +360,8 @@ void WatchFaceInfineat::UpdateSelected(lv_obj_t* object, lv_event_t event) {
                               lv_color_hex(infineatColors.orange[colorIndex*nLines + 7]));
       lv_style_set_line_color(&line8Style, LV_STATE_DEFAULT,
                               lv_color_hex(infineatColors.orange[colorIndex*nLines + 8]));
+      lv_style_set_line_color(&lineBatteryStyle, LV_STATE_DEFAULT,
+                              lv_color_hex(infineatColors.orange[colorIndex*nLines + 4]));
       lv_obj_add_style(line0, LV_LINE_PART_MAIN, &line0Style);
       lv_obj_add_style(line1, LV_LINE_PART_MAIN, &line1Style);
       lv_obj_add_style(line2, LV_LINE_PART_MAIN, &line2Style);
@@ -368,6 +371,7 @@ void WatchFaceInfineat::UpdateSelected(lv_obj_t* object, lv_event_t event) {
       lv_obj_add_style(line6, LV_LINE_PART_MAIN, &line6Style);
       lv_obj_add_style(line7, LV_LINE_PART_MAIN, &line7Style);
       lv_obj_add_style(line8, LV_LINE_PART_MAIN, &line8Style);
+      lv_obj_add_style(lineBattery, LV_LINE_PART_MAIN, &lineBatteryStyle);
       lv_obj_set_style_local_bg_color(notificationIcon, LV_BTN_PART_MAIN, LV_STATE_DEFAULT,
                                       lv_color_hex(infineatColors.orange[colorIndex*nLines + 7]));
     }
