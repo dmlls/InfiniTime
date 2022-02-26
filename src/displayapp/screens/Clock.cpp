@@ -43,8 +43,11 @@ Clock::Clock(DisplayApp* app,
         case 2:
           return PineTimeStyleScreen();
           break;
+        // case 3:
+        //   return WatchFaceTerminalScreen();
+        //   break;
         case 3:
-          return WatchFaceTerminalScreen();
+          return WatchFaceInfineatScreen();
           break;
         case 4:
           return WatchFaceInfineatScreen();
