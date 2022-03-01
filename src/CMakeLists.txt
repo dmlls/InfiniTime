@@ -515,6 +515,8 @@ list(APPEND SOURCE_FILES
         displayapp/fonts/lv_font_sys_48.c
         displayapp/fonts/open_sans_light.c
         displayapp/lv_pinetime_theme.c
+        displayapp/fonts/bebas_neue_120.c
+        displayapp/fonts/teko_28.c
 
         systemtask/SystemTask.cpp
         drivers/TwiMaster.cpp
