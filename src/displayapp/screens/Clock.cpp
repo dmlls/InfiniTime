@@ -49,9 +49,6 @@ Clock::Clock(DisplayApp* app,
         case 4:
           return WatchFaceInfineatScreen();
           break;
-        case 4:
-          return WatchFaceInfineatScreen();
-          break;
       }
       return WatchFaceDigitalScreen();
     }()} {
