@@ -360,11 +360,8 @@ void WatchFaceInfineat::UpdateSelected(lv_obj_t* object, lv_event_t event) {
                               lv_color_hex(infineatColors.orange[colorIndex*nLines + 7]));
       lv_style_set_line_color(&line8Style, LV_STATE_DEFAULT,
                               lv_color_hex(infineatColors.orange[colorIndex*nLines + 8]));
-<<<<<<< HEAD
       lv_style_set_line_color(&lineBatteryStyle, LV_STATE_DEFAULT,
                               lv_color_hex(infineatColors.orange[colorIndex*nLines + 4]));
-=======
->>>>>>> d6c69d9 (Fixes in side cover toggling)
       lv_obj_add_style(line0, LV_LINE_PART_MAIN, &line0Style);
       lv_obj_add_style(line1, LV_LINE_PART_MAIN, &line1Style);
       lv_obj_add_style(line2, LV_LINE_PART_MAIN, &line2Style);

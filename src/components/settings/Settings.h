@@ -272,8 +272,12 @@ namespace Pinetime {
       uint8_t appMenu = 0;
       uint8_t settingsMenu = 0;
       uint8_t watchFacesMenu = 0;
+<<<<<<< HEAD
 
       /* ble state is intentionally not saved with the other watch settings and initialized
+=======
+      /* airplaneMode is intentionally not saved with the other watch settings and initialized
+>>>>>>> b0a2ce1 (Implement SettingWatchFace list)
        * to off (false) on every boot because we always want ble to be enabled on startup
        */
       bool bleRadioEnabled = true;
