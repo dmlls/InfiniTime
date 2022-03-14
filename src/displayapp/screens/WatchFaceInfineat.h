@@ -10,6 +10,7 @@
 namespace Pinetime {
   namespace Controllers {
     class Settings;
+    class Battery;
     class Ble;
     class NotificationManager;
     class MotionController;
@@ -22,6 +23,7 @@ namespace Pinetime {
       public:
         WatchFaceInfineat(DisplayApp* app,
                           Controllers::DateTime& dateTimeController,
+                          Controllers::Battery& batteryController,
                           Controllers::Ble& bleController,
                           Controllers::NotificationManager& notificationManager,
                           Controllers::Settings& settingsController,
@@ -46,7 +48,7 @@ namespace Pinetime {
         uint32_t savedTick = 0;
 
         DirtyValue<uint8_t> batteryPercentRemaining {};
-        DirtyValue<bool> powerPresent {};
+        DirtyValue<bool> isCharging {};
         DirtyValue<bool> bleState {};
         DirtyValue<bool> bleRadioEnabled {};
         DirtyValue<std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>> currentDateTime {};
@@ -98,6 +100,8 @@ namespace Pinetime {
         lv_obj_t* stepIcon;
         lv_obj_t* stepValue;
         lv_obj_t* notificationIcon;
+        lv_obj_t* batteryIcon;
+        lv_obj_t* batteryPlug;
         lv_obj_t* btnClose;
         lv_obj_t* btnNextColor;
         lv_obj_t* btnToggleCover;
@@ -118,6 +122,7 @@ namespace Pinetime {
         } infineatColors;
 
         Controllers::DateTime& dateTimeController;
+        Controllers::Battery& batteryController;
         Controllers::Ble& bleController;
         Controllers::NotificationManager& notificationManager;
         Controllers::Settings& settingsController;

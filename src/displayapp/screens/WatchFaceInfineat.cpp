@@ -4,11 +4,13 @@
 #include <lvgl/lvgl.h>
 #include <cstdio>
 #include "displayapp/screens/Symbols.h"
+#include "displayapp/screens/BatteryIcon.h"
 #include "displayapp/screens/BleIcon.h"
 #include "components/settings/Settings.h"
 #include "components/ble/NotificationManager.h"
 #include "components/ble/BleController.h"
 #include "components/motion/MotionController.h"
+#include "components/battery/BatteryController.h"
 
 using namespace Pinetime::Applications::Screens;
 
@@ -23,6 +25,7 @@ LV_IMG_DECLARE(logo_pine);
 
 WatchFaceInfineat::WatchFaceInfineat(DisplayApp* app,
                                      Controllers::DateTime& dateTimeController,
+                                     Controllers::Battery& batteryController,
                                      Controllers::Ble& bleController,
                                      Controllers::NotificationManager& notificationManager,
                                      Controllers::Settings& settingsController,
@@ -30,6 +33,7 @@ WatchFaceInfineat::WatchFaceInfineat(DisplayApp* app,
   : Screen(app),
     currentDateTime {{}},
     dateTimeController {dateTimeController},
+    batteryController {batteryController},
     bleController {bleController},
     notificationManager {notificationManager},
     settingsController {settingsController},
@@ -181,6 +185,16 @@ WatchFaceInfineat::WatchFaceInfineat(DisplayApp* app,
   lv_obj_set_style_local_text_font(labelDate, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &teko_28);
   lv_obj_align(labelDate, lv_scr_act(), LV_ALIGN_IN_RIGHT_MID, -1, 0);
   lv_label_set_text(labelDate, "Mon 01");
+
+  batteryIcon = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_color(batteryIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
+  lv_label_set_text_static(batteryIcon, Symbols::batteryFull);
+  lv_obj_align(batteryIcon, labelDate, LV_ALIGN_OUT_TOP_RIGHT, 0, 0);
+
+  batteryPlug = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_color(batteryPlug, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
+  lv_label_set_text_static(batteryPlug, Symbols::plug);
+  lv_obj_align(batteryPlug, batteryIcon, LV_ALIGN_OUT_LEFT_MID, -5, 0);
 
   bleIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(bleIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
@@ -445,6 +459,19 @@ void WatchFaceInfineat::Refresh() {
       currentDayOfWeek = dayOfWeek;
       currentDay = day;
     }
+  }
+
+  batteryPercentRemaining = batteryController.PercentRemaining();
+  if (batteryPercentRemaining.IsUpdated()) {
+    auto batteryPercent = batteryPercentRemaining.Get();
+    lv_label_set_text_static(batteryIcon, BatteryIcon::GetBatteryIcon(batteryPercent));
+    lv_obj_realign(batteryIcon);
+  }
+
+  isCharging = batteryController.IsCharging();
+  if (isCharging.IsUpdated()) {
+    lv_label_set_text_static(batteryPlug, BatteryIcon::GetPlugIcon(isCharging.Get()));
+    lv_obj_realign(batteryPlug);
   }
 
   bleState = bleController.IsConnected();
