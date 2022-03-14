@@ -106,5 +106,6 @@ std::unique_ptr<Screen> Clock::WatchFaceInfineatScreen() {
                                                       bleController,
                                                       notificatioManager,
                                                       settingsController,
+                                                      heartRateController,
                                                       motionController);
 }

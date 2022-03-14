@@ -11,6 +11,7 @@
 #include "components/ble/BleController.h"
 #include "components/motion/MotionController.h"
 #include "components/battery/BatteryController.h"
+#include "components/heartrate/HeartRateController.h"
 
 using namespace Pinetime::Applications::Screens;
 
@@ -29,6 +30,7 @@ WatchFaceInfineat::WatchFaceInfineat(DisplayApp* app,
                                      Controllers::Ble& bleController,
                                      Controllers::NotificationManager& notificationManager,
                                      Controllers::Settings& settingsController,
+                                     Controllers::HeartRateController& heartRateController,
                                      Controllers::MotionController& motionController)
   : Screen(app),
     currentDateTime {{}},
@@ -37,6 +39,7 @@ WatchFaceInfineat::WatchFaceInfineat(DisplayApp* app,
     bleController {bleController},
     notificationManager {notificationManager},
     settingsController {settingsController},
+    heartRateController {heartRateController},
     motionController {motionController} {
 
   // Black background covering the whole screen
@@ -211,6 +214,17 @@ WatchFaceInfineat::WatchFaceInfineat(DisplayApp* app,
   lv_obj_set_style_local_text_color(stepIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
   lv_label_set_text(stepIcon, Symbols::shoe);
   lv_obj_align(stepIcon, stepValue, LV_ALIGN_OUT_LEFT_MID, -5, 0);
+
+  heartbeatValue = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_color(heartbeatValue, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xCE1B1B));
+  lv_obj_set_style_local_text_font(heartbeatValue, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &teko_28);
+  lv_label_set_text_static(heartbeatValue, "");
+  lv_obj_align(heartbeatValue, lv_scr_act(), LV_ALIGN_IN_BOTTOM_RIGHT, 0, 0);
+
+  heartbeatIcon = lv_label_create(lv_scr_act(), nullptr);
+  lv_label_set_text_static(heartbeatIcon, Symbols::heartBeat);
+  lv_obj_set_style_local_text_color(heartbeatIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xCE1B1B));
+  lv_obj_align(heartbeatIcon, heartbeatValue, LV_ALIGN_OUT_LEFT_MID, -5, 0);
 
   // Setting buttons
   btnClose = lv_btn_create(lv_scr_act(), nullptr);
@@ -494,5 +508,20 @@ void WatchFaceInfineat::Refresh() {
       lv_obj_set_hidden(btnSettings, true);
       savedTick = 0;
     }
+  }
+
+  heartbeat = heartRateController.HeartRate();
+  heartbeatRunning = heartRateController.State() != Controllers::HeartRateController::States::Stopped;
+  if (heartbeat.IsUpdated() || heartbeatRunning.IsUpdated()) {
+    if (heartbeatRunning.Get()) {
+      lv_obj_set_style_local_text_color(heartbeatIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xCE1B1B));
+      lv_label_set_text_fmt(heartbeatValue, "%d", heartbeat.Get());
+    } else {
+      lv_obj_set_style_local_text_color(heartbeatIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
+      lv_label_set_text_static(heartbeatValue, "");
+    }
+
+    lv_obj_realign(heartbeatValue);
+    lv_obj_realign(heartbeatIcon);
   }
 }
