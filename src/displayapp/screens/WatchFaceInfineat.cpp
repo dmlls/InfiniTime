@@ -192,16 +192,21 @@ WatchFaceInfineat::WatchFaceInfineat(DisplayApp* app,
   lv_obj_set_style_local_text_font(labelTimeAmPm, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &teko_28);
   lv_label_set_text(labelTimeAmPm, "");
 
+  dateBleContainer = lv_obj_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_bg_opa(dateBleContainer, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_TRANSP);
+  lv_obj_set_size(dateBleContainer, 60, 30);
+  lv_obj_align(dateBleContainer, lv_scr_act(), LV_ALIGN_IN_RIGHT_MID, 0, 0);
+
   labelDate = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(labelDate, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
   lv_obj_set_style_local_text_font(labelDate, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &teko_28);
-  lv_obj_align(labelDate, lv_scr_act(), LV_ALIGN_IN_RIGHT_MID, -1, 0);
+  lv_obj_align(labelDate, dateBleContainer, LV_ALIGN_IN_TOP_MID, 0, 0);
   lv_label_set_text(labelDate, "Mon 01");
 
   bleIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(bleIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
   lv_label_set_text(bleIcon, Symbols::bluetooth);
-  lv_obj_align(bleIcon, labelDate, LV_ALIGN_OUT_BOTTOM_MID, 0, 3);
+  lv_obj_align(bleIcon, dateBleContainer, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
 
   stepValue = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(stepValue, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
@@ -458,8 +463,7 @@ void WatchFaceInfineat::Refresh() {
 
     if ((year != currentYear) || (month != currentMonth) || (dayOfWeek != currentDayOfWeek) || (day != currentDay)) {
       lv_label_set_text_fmt(labelDate, "%s %02d", dateTimeController.DayOfWeekShortToStringLow(), day);
-      lv_obj_align(labelDate, lv_scr_act(), LV_ALIGN_IN_RIGHT_MID, 0, 0);
-      lv_obj_set_size(labelDate, 5, 5);
+      lv_obj_realign(labelDate);
 
       currentYear = year;
       currentMonth = month;
@@ -489,7 +493,7 @@ void WatchFaceInfineat::Refresh() {
   bleRadioEnabled = bleController.IsRadioEnabled();
   if (bleState.IsUpdated()) {
     lv_label_set_text(bleIcon, BleIcon::GetIcon(bleState.Get()));
-    lv_obj_align(bleIcon, labelDate, LV_ALIGN_OUT_BOTTOM_MID, 0, 3);
+    lv_obj_realign(bleIcon);
   }
 
   stepCount = motionController.NbSteps();
