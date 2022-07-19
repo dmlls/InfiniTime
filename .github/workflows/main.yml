@@ -7,9 +7,9 @@ name: Build PineTime Firmware
 
 on:
   push:
-    branches: [ master, develop ]
+    branches: [ master, develop, infineat-color ]
   pull_request:
-    branches: [ master, develop ]
+    branches: [ master, develop, infineat-color ]
 
 jobs:
   build:
